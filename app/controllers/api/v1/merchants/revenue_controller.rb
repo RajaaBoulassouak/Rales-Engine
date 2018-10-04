@@ -5,6 +5,7 @@ class Api::V1::Merchants::RevenueController < ApplicationController
   end 
   
   def show 
-  
+    merchant_revenue = Merchant.revenue(params[:id]).round(2)/100
+    render json: {"revenue" => "#{merchant_revenue}"}
   end 
 end 
