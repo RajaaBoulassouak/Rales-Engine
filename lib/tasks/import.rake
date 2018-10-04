@@ -4,15 +4,15 @@ namespace :import do
   desc "Import csv data"
   task data: :environment do
     
-    CSV.foreach('./db/csv_data/merchants.csv', headers: true) do |row|
-      Merchant.create(row.to_h)
-    end
-    puts "#{Merchant.count} Merchants in database"
-    
     CSV.foreach('./db/csv_data/customers.csv', headers: true) do |row|
       Customer.create(row.to_h)
     end
     puts "#{Customer.count} Customers in database"
+    
+    CSV.foreach('./db/csv_data/merchants.csv', headers: true) do |row|
+      Merchant.create(row.to_h)
+    end
+    puts "#{Merchant.count} Merchants in database"
     
     CSV.foreach('./db/csv_data/invoices.csv', headers: true) do |row|
       Invoice.create(row.to_h)
