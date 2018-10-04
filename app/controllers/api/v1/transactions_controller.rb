@@ -1,9 +1,9 @@
 class Api::V1::TransactionsController < ApplicationController
   def index
-    render json: Transaction.all
+    render json: Transaction.unscoped.all
   end
 
   def show
-    render json: Transaction.find(params[:id])
+    render json: Transaction.unscoped.find(params[:id])
   end
 end

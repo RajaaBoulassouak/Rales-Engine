@@ -5,26 +5,26 @@ class Merchant < ApplicationRecord
   has_many :invoices
   has_many :invoice_items, through: :invoices
   
-  def self.most_revenue(limit = 3)
+  def self.most_revenue(quantity)
     select("merchants.*, sum(invoice_items.quantity*invoice_items.unit_price) AS total_revenue")
-    .joins(:invoices, :invoice_items)
+    .joins(invoices: [:invoice_items, :transactions])
     .group(:id)
     .order("total_revenue DESC")
-    .limit(limit)
+    .limit(quantity)
   end
   
-  def self.most_items(limit = 3)
+  def self.most_items(quantity)
     select("merchants.*, sum(invoice_items.quantity) AS total_items")
-    .joins(:invoices, :invoice_items)
+    .joins(invoices: [:invoice_items, :transactions])
     .group(:id)
     .order("total_items DESC")
-    .limit(limit)
+    .limit(quantity)
   end 
   
-  # def self.revenue_by_date(date = "2012-03-27")
-  #   select("sum(invoice_items.quantity*invoice_items.unit_price) AS total_revenue")
-  #   .joins(:invoices, :invoice_items)
-  #   .group(:created_at)
-  #   .where(created_at: date)
-  # end 
+  def self.revenue(date)
+    select("sum(invoice_items.quantity*invoice_items.unit_price) AS total_revenue")
+    .joins(:invoices, :invoice_items)
+    .group(:created_at)
+    .where(created_at: date)
+  end 
 end
