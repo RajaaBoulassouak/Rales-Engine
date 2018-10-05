@@ -15,7 +15,14 @@ Rails.application.routes.draw do
         get '/revenue' => 'revenue#index'
         get '/:id/revenue' => 'revenue#show'
         get '/:id/favorite_customer' => 'favorite_customer#show'
+        get '/find' => 'find#show'
+        get '/find_all' => 'find#index'
       end 
+      
+      namespace :invoices do 
+        get '/find' => 'find#show'
+        get '/find_all' => 'find#index'
+      end
       
     end 
   end 

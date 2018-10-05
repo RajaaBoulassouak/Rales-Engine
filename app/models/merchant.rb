@@ -36,10 +36,6 @@ class Merchant < ApplicationRecord
     .total_revenue
   end
   
-#   SELECT customers.*, sum(invoices.id) AS invoice_total FROM merchants INNER JOIN invoices ON merchants.id = invoices.merc
-# hant_id INNER JOIN transactions ON invoices.id=transactions.invoice_id INNER JOIN customers ON customers.id=invoices.customer_id WHERE merchants.id
-# =80 GROUP BY customers.id ORDER BY invoice_total DESC LIMIT 2;
-  
   # def self.revenue_date(date)
   #   select("merchants.name, sum(invoice_items.quantity*invoice_items.unit_price) AS total_revenue")
   #   .joins(invoices: [:invoice_items, :transactions])
@@ -47,6 +43,11 @@ class Merchant < ApplicationRecord
   #   .find(date)
   #   .total_revenue
   # end
+  
+  # SELECT customers.*, sum(invoices.id) AS invoice_total FROM merchants INNER JOIN invoices ON merchants.id = invoices.merc
+  # hant_id INNER JOIN transactions ON invoices.id=transactions.invoice_id INNER JOIN customers ON customers.id=invoices.customer_id WHERE merchants.id
+  # =80 GROUP BY customers.id ORDER BY invoice_total DESC LIMIT 2;
+  
   
   def self.favorite_customer(id)
     select("customers.id, sum(invoices.id) AS invoice_total")
