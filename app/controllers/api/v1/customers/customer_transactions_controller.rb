@@ -1,8 +1,6 @@
 class Api::V1::Customers::CustomerTransactionsController < ApplicationController
 
-  def show 
-    transactions = Transaction.unscoped.all
-    
+  def show
     render json: Customer.find(params[:id]).transactions
   end
 end
