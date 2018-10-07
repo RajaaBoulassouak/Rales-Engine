@@ -44,17 +44,13 @@ class Merchant < ApplicationRecord
   #   .total_revenue
   # end
   
-  # SELECT customers.*, sum(invoices.id) AS invoice_total FROM merchants INNER JOIN invoices ON merchants.id = invoices.merc
-  # hant_id INNER JOIN transactions ON invoices.id=transactions.invoice_id INNER JOIN customers ON customers.id=invoices.customer_id WHERE merchants.id
-  # =80 GROUP BY customers.id ORDER BY invoice_total DESC LIMIT 2;
-  
-  
-  def self.favorite_customer(id)
-    select("customers.id, sum(invoices.id) AS invoice_total")
-    .joins(invoices: [:transactions, :customers])
-    .group("customers.id")
-    .find(id)
+  def self.favorite_customer(merchant_id)
+    Customer.select("customers.*, COUNT(invoices.id) AS invoice_total")
+    .joins(invoices: :transactions)
+    .where(invoices: { merchant_id: merchant_id })
+    .group(:id)
     .order("invoice_total DESC")
+    .limit(1)
     .first
   end
 end

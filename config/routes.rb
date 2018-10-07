@@ -6,7 +6,6 @@ Rails.application.routes.draw do
         get '/most_items' => 'most_items#index'
         get '/revenue' => 'revenue#index'
         get '/:id/revenue' => 'revenue#show'
-        get '/:id/favorite_customer' => 'favorite_customer#show'
         get '/find' => 'find#show'
         get '/find_all' => 'find#index'
         get '/random' => 'random#show'
@@ -57,36 +56,14 @@ Rails.application.routes.draw do
       end
       
       resources :merchants, only: [:index, :show] do 
-        resources :items, only: [:index]
-        resources :invoices, only: [:index]
+        get '/favorite_customer' => 'merchants/favorite_customer#show'
       end
       
-      resources :invoices, only: [:index, :show] do 
-        resources :transactions, only: [:index] 
-        resources :invoice_items, only: [:index]
-        resources :items, only: [:index]
-        resources :customers, only: [:show]
-        resources :merchants, only: [:show]
-      end
-      
-      resources :invoice_items, only: [:index, :show] do 
-        resources :invoices, only: [:show]
-        resources :items, only: [:show]
-      end 
-      
-      resources :items, only: [:index, :show] do
-        resources :invoice_items, only: [:index]
-        resources :merchants, only: [:show]
-      end
-      
-      resources :transactions, only: [:index, :show] do
-        resources :invoices, only: [:show]
-      end
-      
-      resources :customers, only: [:index, :show] do
-        resources :invoices, only: [:index]
-        resources :transactions, only: [:index]
-      end
+      resources :invoices, only: [:index, :show] 
+      resources :invoice_items, only: [:index, :show] 
+      resources :items, only: [:index, :show] 
+      resources :transactions, only: [:index, :show]
+      resources :customers, only: [:index, :show]
     end 
   end 
 end
