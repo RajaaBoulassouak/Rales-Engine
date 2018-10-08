@@ -21,28 +21,26 @@ class Merchant < ApplicationRecord
     .limit(quantity)
   end 
 
-  # def self.revenue(date)
-  #   select("sum(invoice_items.quantity*invoice_items.unit_price) AS total_revenue")
-  #   .joins(:invoices, :invoice_items)
-  #   .group(:created_at)
-  #   .where(created_at: date)
-  # end
+  def self.date_revenue(date)
+    joins(invoices: [:invoice_items, :transactions])
+    .where(invoices: {created_at: date.to_date.beginning_of_day..date.to_date.end_of_day} )
+    .sum('quantity*unit_price')  
+  end
   
-  def self.revenue(id)
+  def self.revenue(params)
     select("merchants.name, sum(invoice_items.quantity*invoice_items.unit_price) AS total_revenue")
     .joins(invoices: [:invoice_items, :transactions])
     .group(:id)
-    .find(id)
+    .find(params['id'])
     .total_revenue
   end
-  
-  # def self.revenue_date(date)
-  #   select("merchants.name, sum(invoice_items.quantity*invoice_items.unit_price) AS total_revenue")
-  #   .joins(invoices: [:invoice_items, :transactions])
-  #   .group(:id)
-  #   .find(date)
-  #   .total_revenue
-  # end
+    
+  def self.merchant_revenue_by_date(params)
+    joins(invoices: [:invoice_items, :transactions])
+    .where(invoices: {created_at: params['date'].to_date.beginning_of_day..params['date'].to_date.end_of_day} )
+    .where('merchants.id = ?', params['id'])
+    .sum('quantity*unit_price')
+  end
   
   def self.favorite_customer(merchant_id)
     Customer.select("customers.*, COUNT(invoices.id) AS invoice_total")
